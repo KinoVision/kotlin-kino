@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Gradle
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Kotlin
+.kotlin/
+
+# Local environment/config
+local.properties
+.env
+.env.*
+*.keystore
+*.jks
+
+# Logs
+*.log
+
+# OS/editor temp files
+*.swp
+*.swo
+*~
