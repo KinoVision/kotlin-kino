@@ -103,10 +103,14 @@ class KinoClient(private val config: KinoConfig) {
         scanId: String,
         onProgress: ((Double) -> Unit)? = null
     ): ScanResult {
-        val maxAttempts = 30
-        val delayMs = 2_000L
+        val maxAttempts    = 21
+        val firstDelayMs   = 20_000L // v3.0 typically settles around 20s
+        val pollIntervalMs = 5_000L
 
         repeat(maxAttempts) { attempt ->
+            // Delay before polling: 20s on the first attempt, 5s on subsequent
+            delay(if (attempt == 0) firstDelayMs else pollIntervalMs)
+
             val result = getScan(scanId)
 
             when (result.status) {
@@ -114,17 +118,12 @@ class KinoClient(private val config: KinoConfig) {
                     onProgress?.invoke(1.0)
                     return result
                 }
-                ScanStatus.FAILED -> throw KinoException.InternalError
-                ScanStatus.REJECTED -> throw KinoException.QcRejected
+                ScanStatus.FAILED    -> throw KinoException.InternalError
+                ScanStatus.REJECTED  -> throw KinoException.QcRejected
                 else -> {
-                    // PENDING or PROCESSING — emit a rough progress estimate
                     val progress = (attempt + 1).toDouble() / maxAttempts
                     onProgress?.invoke(progress)
                 }
-            }
-
-            if (attempt < maxAttempts - 1) {
-                delay(delayMs)
             }
         }
 

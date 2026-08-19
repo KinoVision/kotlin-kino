@@ -138,7 +138,7 @@ private fun CompletedResults(result: ScanResult, brandColor: Color) {
         }
     }
 
-    // Secondary metrics: muscle mass + bone mass
+    // Secondary metrics: muscle mass + bone mineral content
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -150,9 +150,9 @@ private fun CompletedResults(result: ScanResult, brandColor: Color) {
             modifier = Modifier.weight(1f)
         )
         MetricCard(
-            label = "Bone mass",
-            value = result.estimatedBoneMassLbs?.let { "%.1f lbs".format(it) },
-            isDerived = result.derived?.contains("estimated_bone_mass_lbs") == true,
+            label = "Bone mineral",
+            value = result.boneMineralContentLbs?.let { "%.1f lbs".format(it) },
+            isDerived = false,
             modifier = Modifier.weight(1f)
         )
     }
